@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!-- DOCTYPE: le dice al navegador que esta pagina es HTML5. Siempre va en la primera linea -->
+<!-- html: encierra TODA la pagina. lang="es": el texto esta en espanol -->
+<html lang="es">
+<!-- head: datos de la pagina que NO se ven (titulo, estilos, fuentes, scripts) -->
+<head>
+    <!-- meta charset="UTF-8": permite tildes y enes (sin esto, "Catálogo" saldria "CatÃ¡logo") -->
+    <meta charset="UTF-8">
+    <!-- meta viewport: en el celular, la pagina usa el ancho real de la pantalla, sin zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- title: el texto de la pestana del navegador -->
+    <title>Catálogo · EcoTienda</title>
+    <!-- link a Bootstrap: hoja de estilos ya hecha, desde internet (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- Google Fonts: la fuente Poppins. preconnect abre la conexion antes, para que cargue mas rapido -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- crossorigin: el archivo de la fuente viene de otro sitio (gstatic.com); asi lo permite -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- La hoja de la fuente: grosor normal (400) y negrilla (700) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+    <!-- La hoja de estilos PROPIA: la MISMA de index.html, asi las dos paginas se ven iguales -->
+    <link rel="stylesheet" href="css/estilos.css">
+    <!-- script: carga el programa JavaScript js/tienda.js.
+         defer: lo ejecuta cuando la pagina ya termino de cargar
+         (si no, JavaScript buscaria #productos antes de que exista) -->
+    <script src="js/tienda.js" defer></script>
+<!-- Cierra el head -->
+</head>
+<!-- body: todo lo que se ve. container centra el contenido; py-3 deja espacio arriba y abajo -->
+<body class="container py-3">
+    <!-- header: el encabezado, igual al de index.html (clase propia "encabezado") -->
+    <header class="encabezado">
+        <!-- h1: el titulo principal de esta pagina -->
+        <h1>Catálogo</h1>
+        <!-- p: un parrafo que explica la pagina -->
+        <p>Cada producto dice cuánto le ahorra al mes, con una tarifa de 950 COP/kWh.</p>
+        <!-- nav: el menu, con un enlace (a) a cada pagina -->
+        <nav class="menu">
+            <!-- href: la pagina a la que lleva el enlace -->
+            <a href="index.html">Inicio</a>
+            <a href="catalogo.html">Catálogo</a>
+        <!-- Cierra el menu -->
+        </nav>
+    <!-- Cierra el encabezado -->
+    </header>
+
+    <!-- main: el contenido principal -->
+    <main>
+        <!-- div class="filtros": la caja con los botones para filtrar por categoria -->
+        <div class="filtros">
+            <!-- button: un BOTON. data-categoria: un dato PROPIO guardado en el boton
+                 (JavaScript lo lee con boton.dataset.categoria para saber que mostrar).
+                 "filtro activo": este es el boton elegido al empezar (Todas) -->
+            <button class="filtro activo" data-categoria="todas">Todas</button>
+            <!-- Los otros tres botones: uno por categoria -->
+            <button class="filtro" data-categoria="iluminacion">Iluminación</button>
+            <button class="filtro" data-categoria="electrodomesticos">Electrodomésticos</button>
+            <button class="filtro" data-categoria="solar">Energía solar</button>
+        <!-- Cierra la caja de los filtros -->
+        </div>
+
+        <!-- div class="catalogo": dos columnas: los productos a la izquierda y el carrito a la derecha -->
+        <div class="catalogo">
+            <!-- div id="productos": VACIO a proposito. JavaScript lo llena con las tarjetas
+                 (y lo vuelve a llenar cada vez que se oprime un filtro) -->
+            <div id="productos" class="tarjetas"></div>
+
+            <!-- aside: contenido al lado del principal. Aqui, el CARRITO.
+                 id="carrito": JavaScript y CSS lo encuentran por este nombre -->
+            <aside id="carrito">
+                <!-- h2: el titulo del carrito -->
+                <h2>Carrito</h2>
+                <!-- ul: una LISTA sin numeros. Empieza vacia; JavaScript le agrega
+                     un li (elemento de la lista) por cada producto que se agrega -->
+                <ul id="lista-carrito"></ul>
+                <!-- Dos parrafos vacios: JavaScript escribe aqui el total y el ahorro -->
+                <p id="total"></p>
+                <p id="ahorro"></p>
+                <!-- El boton para vaciar el carrito. Clases de Bootstrap:
+                     btn = boton; btn-outline-secondary = gris, solo con borde; btn-sm = pequeno -->
+                <button id="vaciar" class="btn btn-outline-secondary btn-sm">Vaciar carrito</button>
+            <!-- Cierra el carrito -->
+            </aside>
+        <!-- Cierra las dos columnas -->
+        </div>
+    <!-- Cierra el contenido principal -->
+    </main>
+
+    <!-- footer: el pie de pagina, con su clase propia "pie" -->
+    <footer class="pie">
+        <!-- Aviso: los productos no son reales -->
+        <p>Los productos y sus precios son de ejemplo.</p>
+        <!-- El curso y la institucion -->
+        <p>Ingeniería Web I · IU Digital de Antioquia · 2026-2</p>
+    <!-- Cierra el pie de pagina -->
+    </footer>
+<!-- Cierra el cuerpo: aqui termina lo que se ve -->
+</body>
+<!-- Cierra la pagina -->
+</html>

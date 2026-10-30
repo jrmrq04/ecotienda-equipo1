@@ -1,0 +1,230 @@
+// =============================================================
+// Hoja de estilos de EcoTienda, escrita en Sass.
+// Se compila a css/estilos.css con:
+//     npx sass scss/estilos.scss css/estilos.css --no-source-map
+// El navegador NO lee este archivo: lee el .css que produce Sass.
+// =============================================================
+
+// @use trae las variables y el mixin del parcial _variables.scss
+// "as *" permite escribir $color-principal en vez de variables.$color-principal
+@use "variables" as *;
+
+// Variables CSS generadas desde las de Sass con #{ }: asi existen
+// tambien en el navegador (las usa Bootstrap, abajo)
+:root {
+    --color-principal: #{$color-principal};   // #{ } escribe el valor de la variable de Sass
+    --color-acento: #{$color-acento};
+    --color-suave: #{$color-suave};
+}
+
+// La pagina entera
+body {
+    font-family: "Poppins", Arial, sans-serif;   // la fuente de Google Fonts; si no carga, Arial
+    background-color: $color-fondo;              // fondo claro (variable de Sass)
+    color: $color-texto;                         // color de la letra
+}
+
+// Los titulos
+h1, h2, h3 {
+    color: $color-principal;    // en verde oscuro
+    font-weight: 700;           // en negrilla
+}
+
+// --- ANIDAMIENTO: las reglas de adentro solo aplican dentro de .encabezado ---
+.encabezado {
+    background-color: $color-principal;   // fondo verde oscuro
+    margin-bottom: 24px;                  // espacio debajo
+    @include caja(24px);            // el mixin con 24px de relleno
+
+    h1 {                            // se compila como .encabezado h1
+        color: white;               // titulo en blanco
+    }
+
+    p {                             // se compila como .encabezado p
+        color: #E3F2E3;             // texto en verde muy claro
+    }
+
+    @media (max-width: $celular) {  // la media query tambien se anida
+        padding: 16px;              // en celular, menos relleno
+
+        h1 {
+            font-size: 1.6rem;      // y el titulo mas pequeno
+        }
+    }
+}
+
+// La seccion con id="intro"
+#intro {
+    background-color: white;                // fondo blanco
+    padding: 16px 24px;                     // relleno: 16px arriba y abajo, 24px a los lados
+    margin-bottom: 24px;                    // espacio debajo
+    border-left: 6px solid $color-acento;   // borde amarillo solo a la izquierda
+    border-radius: $radio;                  // esquinas redondeadas
+}
+
+// --- Menu con Flexbox ---
+.menu {
+    display: flex;          // los enlaces en fila
+    flex-wrap: wrap;        // si no caben, pasan a otra linea
+    gap: 8px;               // espacio entre los enlaces
+
+    @media (max-width: $celular) {
+        flex-direction: column;   // en celular, el menu en columna
+    }
+
+    > a {                           // se compila como .menu > a
+        color: white;               // letra blanca
+        text-decoration: none;      // sin subrayado
+        padding: 6px 16px;          // relleno: 6px arriba y abajo, 16px a los lados
+        border: 2px solid rgba(255, 255, 255, 0.5);   // borde blanco semitransparente
+        border-radius: 999px;       // forma de pildora
+        transition: background-color 0.3s, color 0.3s;   // cambio suave en 0,3 segundos
+
+        &:hover {                   // & = el selector de afuera: .menu > a:hover
+            background-color: white;        // con el mouse encima: fondo blanco...
+            color: $color-principal;        // ...y letra verde
+        }
+
+        &:focus {                   // .menu > a:focus: se llego con la tecla Tab
+            outline: 3px solid $color-acento;   // contorno amarillo
+        }
+    }
+}
+
+// --- Tarjetas con Grid ---
+.tarjetas {
+    display: grid;                           // rejilla
+    grid-template-columns: repeat(3, 1fr);   // 3 columnas del mismo ancho
+    gap: 16px;                               // espacio entre tarjetas
+    margin-bottom: 24px;                     // espacio debajo
+
+    @media (max-width: $tablet) {
+        grid-template-columns: repeat(2, 1fr);   // en tablet, 2 columnas
+    }
+
+    @media (max-width: $celular) {
+        grid-template-columns: 1fr;              // en celular, 1 columna
+    }
+}
+
+// Cada tarjeta
+.tarjeta {
+    background-color: white;            // fondo blanco
+    border: 1px solid $color-suave;     // borde fino verde claro
+    @include caja;                  // el mixin con su valor por defecto (16px)
+    transition: transform 0.3s;     // el movimiento sera suave
+
+    &:hover {                       // .tarjeta:hover: el mouse encima
+        transform: translateY(-6px);   // sube 6 pixeles
+    }
+
+    &:first-child {                 // .tarjeta:first-child: la primera tarjeta
+        border-top: 6px solid $color-acento;   // borde amarillo grueso arriba
+    }
+
+    p:nth-child(2) {                // .tarjeta p:nth-child(2): el segundo hijo, si es un p
+        min-height: 48px;           // altura minima, para alinear los textos
+    }
+}
+
+// El precio de cada producto
+.precio {
+    color: $color-principal;    // en verde oscuro
+    font-size: 1.3rem;          // 1,3 veces el tamano normal
+    font-weight: 700;           // en negrilla
+}
+
+// --- Lo que muestra cada producto (lo genera JavaScript) ---
+// La etiqueta de la categoria
+.categoria {
+    display: inline-block;          // ocupa solo el ancho de su texto
+    padding: 2px 10px;              // relleno pequeno
+    border-radius: 999px;           // forma de pildora
+    background-color: $color-suave; // fondo verde claro
+    font-size: 0.8rem;              // letra pequena
+}
+
+// El ahorro (kWh y pesos)
+.ahorro {
+    color: #2E7D32;         // en verde
+    font-weight: 700;       // en negrilla
+}
+
+// --- Filtros: botones en fila ---
+.filtros {
+    display: flex;          // los botones en fila
+    flex-wrap: wrap;        // si no caben, pasan a otra linea
+    gap: 8px;               // espacio entre botones
+    margin-bottom: 16px;    // espacio debajo
+}
+
+// Cada boton de filtro
+.filtro {
+    border: 2px solid $color-principal;   // borde verde
+    background-color: white;              // fondo blanco
+    color: $color-principal;              // letra verde
+    padding: 6px 16px;                    // relleno
+    border-radius: 999px;                 // forma de pildora
+    transition: background-color 0.3s;    // cambio de fondo suave
+
+    &:hover,
+    &.activo {                      // &.activo = .filtro.activo: el boton elegido
+        background-color: $color-principal;   // con el mouse encima o elegido: fondo verde...
+        color: white;                         // ...y letra blanca
+    }
+}
+
+// --- Catalogo: productos a la izquierda y carrito a la derecha ---
+.catalogo {
+    display: grid;                  // rejilla
+    grid-template-columns: 3fr 1fr; // 2 columnas: la de productos 3 veces mas ancha que la del carrito
+    gap: 16px;                      // espacio entre las dos
+    align-items: start;             // cada columna arriba, sin estirarse
+
+    @media (max-width: $tablet) {
+        grid-template-columns: 1fr; // en tablet y celular, el carrito pasa abajo
+    }
+}
+
+// El carrito
+#carrito {
+    background-color: white;            // fondo blanco
+    border: 2px solid $color-acento;    // borde amarillo
+    @include caja;                      // relleno, esquinas y sombra (el mixin)
+    position: sticky;               // el carrito se queda visible al bajar
+    top: 16px;                      // a 16px del borde de arriba de la pantalla
+}
+
+// Los enlaces que abren otra pestana
+a[target="_blank"] {
+    color: $color-principal;    // en verde oscuro
+    font-weight: 700;           // en negrilla
+}
+
+// El pie de pagina
+.pie {
+    margin-top: 24px;                   // espacio encima
+    padding-top: 12px;                  // relleno arriba
+    border-top: 1px solid $color-suave; // linea fina arriba
+    color: #52606D;                     // letra gris
+    font-size: 0.9rem;                  // letra un poco mas pequena
+}
+
+// --- Bootstrap personalizado, sin tocar su archivo ---
+// Los botones primarios con los colores de la tienda.
+// Bootstrap lee sus colores de variables --bs-...: aqui se les dan otros valores
+.btn-primary {
+    --bs-btn-bg: var(--color-principal);               // fondo del boton: verde
+    --bs-btn-border-color: var(--color-principal);     // borde: verde
+    --bs-btn-hover-bg: var(--color-acento);            // con el mouse encima: fondo amarillo
+    --bs-btn-hover-border-color: var(--color-acento);  // y borde amarillo
+    --bs-btn-hover-color: #1F2933;                     // y letra oscura
+}
+
+// El aviso (alert) con el amarillo de la tienda
+.alert-warning {
+    background-color: #FFF8E1;              // fondo amarillo muy claro
+    border-color: $color-acento;            // borde amarillo
+    border-left: 6px solid $color-acento;   // borde grueso a la izquierda
+    border-radius: $radio;                  // esquinas redondeadas
+}
