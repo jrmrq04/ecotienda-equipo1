@@ -1,139 +1,110 @@
 <!DOCTYPE html>
-<!-- DOCTYPE: le dice al navegador que esta pagina es HTML5 (la version actual). Siempre va en la primera linea -->
-<!-- html: la etiqueta que encierra TODA la pagina. lang="es": el texto esta en espanol
-     (asi el navegador sabe como leerlo en voz alta y si debe ofrecer traducirlo) -->
+<!-- DOCTYPE: le dice al navegador que esta pagina es HTML5. Siempre va en la primera linea -->
+<!-- html: encierra TODA la pagina. lang="es": el texto esta en espanol -->
 <html lang="es">
-<!-- head (cabeza): datos de la pagina que NO se ven en ella: titulo, estilos, fuentes -->
+<!-- head: datos de la pagina que NO se ven (titulo, estilos, fuentes, scripts) -->
 <head>
-    <!-- meta charset="UTF-8": la forma de guardar las letras. Sin esto, "energía" saldria "energÃ­a" -->
+    <!-- meta charset="UTF-8": permite tildes y enes -->
     <meta charset="UTF-8">
-    <!-- meta viewport: en el celular, la pagina usa el ancho REAL de la pantalla
-         (sin esto, el celular muestra la pagina de computador en miniatura).
-         initial-scale=1.0: empieza sin zoom -->
+    <!-- meta viewport: en el celular, la pagina usa el ancho real de la pantalla, sin zoom -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- title: el texto de la pestana del navegador y el nombre del favorito -->
-    <title>EcoTienda: equipos que ahorran energía</title>
-    <!-- link: trae un archivo de afuera. rel="stylesheet": es una hoja de estilos.
-         href: la direccion. Esta es Bootstrap, una hoja de estilos ya hecha, desde internet (CDN) -->
+    <!-- title: el texto de la pestana del navegador -->
+    <title>ElectroVerde: equipos que ahorran energía</title>
+    <!-- icon: el iconito de la pestana (un rayo). Va dentro del enlace, asi no hace falta otro archivo -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
+    <!-- Bootstrap: hoja de estilos ya hecha, desde internet (CDN). Va PRIMERO -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <!-- Google Fonts: la fuente Poppins, que se descarga de Google -->
-    <!-- preconnect: abre la conexion con los servidores de Google desde antes,
-         para que la fuente llegue mas rapido -->
+    <!-- Google Fonts: la fuente Poppins. preconnect abre la conexion antes, para que cargue mas rapido -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <!-- crossorigin: el archivo de la fuente viene de OTRO sitio (gstatic.com); asi lo permite -->
+    <!-- crossorigin: el archivo de la fuente viene de otro sitio (gstatic.com); asi lo permite -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- La hoja de la fuente Poppins: wght@400;700 = grosor normal (400) y negrilla (700).
-         display=swap: muestra el texto con otra fuente mientras Poppins termina de llegar -->
+    <!-- La hoja de la fuente: grosor normal (400) y negrilla (700) -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
-    <!-- Hoja de estilos PROPIA (estilo EXTERNO): el archivo css/estilos.css.
+    <!-- Hoja de estilos PROPIA (estilo EXTERNO): css/estilos.css, la MISMA en las 4 paginas.
          Va DESPUES de Bootstrap: si las dos dicen algo distinto, gana la que se carga de ultimas -->
     <link rel="stylesheet" href="css/estilos.css">
-<!-- Cierra el head: aqui termina lo que no se ve -->
+<!-- Cierra el head -->
 </head>
-<!-- body (cuerpo): TODO lo que se ve en la pagina.
-     class="container py-3": dos clases de Bootstrap:
-     container = centra el contenido y le pone un ancho maximo;
-     py-3 = espacio arriba y abajo (p = padding, y = eje vertical, 3 = tamano) -->
+<!-- body: todo lo que se ve. container centra el contenido; py-3 deja espacio arriba y abajo -->
 <body class="container py-3">
-    <!-- header: el ENCABEZADO de la pagina (logo, titulo y menu).
-         class="encabezado": una clase PROPIA; su estilo esta en css/estilos.css (.encabezado) -->
+    <!-- header: el encabezado, igual en las 4 paginas (clase propia "encabezado") -->
     <header class="encabezado">
-        <!-- h1: el titulo principal (solo debe haber uno por pagina) -->
-        <h1>EcoTienda</h1>
-        <!-- p: un parrafo de texto -->
+        <!-- div class="marca": el logo y el nombre, en fila (Flexbox) -->
+        <div class="marca">
+            <!-- svg: el LOGO dibujado con codigo (un circulo y un rayo). Sus colores estan en estilos.css -->
+            <svg class="logo" viewBox="0 0 48 48" role="img" aria-label="Logo de ElectroVerde">
+                <circle class="logo-fondo" cx="24" cy="24" r="22"></circle>
+                <path class="logo-rayo" d="M27 6 14 27h8l-3 15 15-22h-9z"></path>
+            </svg>
+            <!-- h1: el titulo principal (solo uno por pagina) -->
+            <h1>ElectroVerde</h1>
+        </div>
+        <!-- p: un parrafo que explica la pagina -->
         <p>Equipos que gastan menos energía, para pagar menos en tiempos de El Niño.</p>
-        <!-- nav: el MENU de navegacion. class="menu": su estilo esta en estilos.css -->
+        <!-- nav: el menu, con un enlace (a) a cada pagina. href: la pagina a la que lleva -->
         <nav class="menu">
-            <!-- a (ancla): un ENLACE. href: a donde lleva; el texto de adentro es lo que se ve -->
-            <!-- Este lleva a esta misma pagina, index.html -->
-            <a href="index.html">Inicio</a>
-            <!-- Este lleva a la pagina del catalogo (se crea en el paso 3) -->
+            <a href="index.html" aria-current="page">Inicio</a>
             <a href="catalogo.html">Catálogo</a>
-             <!-- Este lleva a la pagina de nosotros -->
             <a href="nosotros.html">Nosotros</a>
-             <!-- Este lleva a la pagina de contactos -->
             <a href="contacto.html">Contacto</a>
-        <!-- Cierra el menu -->
         </nav>
-    <!-- Cierra el encabezado -->
     </header>
 
-    <!-- main: el contenido PRINCIPAL de la pagina (lo que cambia de una pagina a otra) -->
+    <!-- main: el contenido principal de la pagina -->
     <main>
-        <!-- div class="alert alert-warning": un AVISO amarillo, componente ya hecho de Bootstrap.
-             En estilos.scss se le cambia el borde. role="alert": los lectores de pantalla
-             (para personas ciegas) lo anuncian como un aviso -->
+        <!-- div class="alert alert-warning": un AVISO amarillo, componente de Bootstrap
+             que estilos.css personaliza (COMPONENTE 2). role="alert": los lectores de pantalla lo anuncian -->
         <div class="alert alert-warning" role="alert">
-            <!-- strong: texto importante, en negrilla -->
+            <!-- strong: texto importante, en negrilla. DATO REAL 1: el precio en la hora pico -->
             <strong>Hora pico:</strong> de 6 a 9 de la noche la energía llegó a costar
             1.612 COP/kWh en septiembre de 2026.
-        <!-- Cierra el aviso -->
         </div>
 
-        <!-- section: una SECCION de la pagina, con su propio tema.
-             id="intro" (de introduccion): un nombre UNICO que inventamos (no se repite en la pagina);
-             en CSS se le da estilo con #intro -->
+        <!-- section id="intro": un nombre UNICO; en CSS se le da estilo con #intro -->
         <section id="intro">
-            <!-- h2: un subtitulo (titulo de segundo nivel, mas pequeno que h1) -->
             <h2>¿Por qué ahorrar energía?</h2>
-            <!-- p: un parrafo. strong: las cifras importantes van en negrilla -->
+            <!-- DATO REAL 2: el precio de bolsa de enero a agosto de 2026 -->
             <p>
                 En 2026 llegó un <strong>El Niño fuerte</strong>: llueve menos, bajan los embalses
                 y la energía se encarece. El precio de bolsa pasó de <strong>212 COP/kWh</strong>
-                en enero a <strong>942 COP/kWh</strong> en agosto.
-            <!-- Cierra el parrafo -->
+                en enero a <strong>942 COP/kWh</strong> en agosto: <strong>4,4 veces más</strong>.
             </p>
-            <!-- Otro parrafo -->
             <p>
                 Cambiar un equipo viejo por uno eficiente baja la factura todos los meses.
-                En el catálogo, cada producto dice cuánto ahorra.
+                En el catálogo de ElectroVerde, cada producto dice cuánto ahorra.
             </p>
-        <!-- Cierra la seccion -->
+            <!-- Un enlace con apariencia de boton (clases de Bootstrap: btn btn-primary) -->
+            <a class="btn btn-primary" href="catalogo.html">Ver el catálogo</a>
         </section>
 
-        <!-- Otra seccion: las ventajas de un equipo eficiente, en tarjetas -->
         <section>
-            <!-- El subtitulo de esta seccion -->
             <h2>Lo que gana con un equipo eficiente</h2>
-            <!-- div: una CAJA para agrupar. class="tarjetas": el contenedor de la REJILLA
-                 (en el paso 3, CSS Grid pone las tarjetas en columnas) -->
+            <!-- div class="tarjetas": la REJILLA (Grid): 3 columnas en computador, 2 en tablet, 1 en celular -->
             <div class="tarjetas">
-                <!-- article: un contenido que tiene sentido solo. Aqui, una TARJETA.
-                     class="tarjeta": su estilo (borde, sombra) esta en estilos.css -->
+                <!-- article: una TARJETA. Su estilo (borde, sombra) esta en estilos.css -->
                 <article class="tarjeta">
-                    <!-- h3: el titulo de la tarjeta (tercer nivel) -->
                     <h3>Paga menos</h3>
-                    <!-- p: el texto de la tarjeta -->
                     <p>Un bombillo LED de 9 W alumbra igual que uno de 60 W y gasta 85 % menos.</p>
-                <!-- Cierra la tarjeta -->
                 </article>
-                <!-- Segunda tarjeta: la misma estructura (h3 + p) -->
                 <article class="tarjeta">
                     <h3>Recupera la inversión</h3>
                     <p>Con lo que ahorra cada mes, el equipo se paga solo en pocos meses.</p>
                 </article>
-                <!-- Tercera tarjeta -->
                 <article class="tarjeta">
                     <h3>Cuida los embalses</h3>
                     <p>Menos demanda en la hora pico significa menos plantas térmicas encendidas.</p>
                 </article>
-            <!-- Cierra la caja de las tarjetas -->
             </div>
         </section>
-    <!-- Cierra el contenido principal -->
     </main>
 
-    <!-- footer: el PIE de pagina (fuentes, autores, derechos). class="pie": estilo en estilos.css -->
+    <!-- footer: el pie de pagina, con su clase propia "pie" -->
     <footer class="pie">
-        <!-- Un enlace a XM, la empresa que publica los precios de la energia en Colombia.
-             target="_blank": el enlace se abre en OTRA pestana, sin cerrar la tienda -->
-        <p>Fuente de los precios: <a href="https://www.xm.com.co" target="_blank">XM</a>.
+        <!-- Enlace a XM, la empresa que publica los precios de la energia en Colombia.
+             target="_blank": se abre en OTRA pestana; rel="noopener" lo hace mas seguro -->
+        <p>Fuente de los precios: <a href="https://www.xm.com.co" target="_blank" rel="noopener">XM</a>.
            Los productos y sus precios son de ejemplo.</p>
-        <!-- El curso y la institucion -->
-        <p>Ingeniería Web I · IU Digital de Antioquia · 2026-2</p>
-    <!-- Cierra el pie de pagina -->
+        <p>ElectroVerde · Ingeniería Web I · IU Digital de Antioquia · 2026-2</p>
     </footer>
-<!-- Cierra el cuerpo: aqui termina lo que se ve -->
 </body>
-<!-- Cierra la pagina -->
 </html>
