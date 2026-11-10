@@ -1,40 +1,55 @@
-// =============================================================
-// Hoja de estilos de EcoTienda, escrita en Sass.
-// Se compila a css/estilos.css con:
-//     npx sass scss/estilos.scss css/estilos.css --no-source-map
-// El navegador NO lee este archivo: lee el .css que produce Sass.
-// =============================================================
+/* =============================================================
+   Hoja de estilos de ElectroVerde, escrita en Sass.
+   Se compila a css/estilos.css con:
+       npx sass scss/estilos.scss css/estilos.css --no-source-map
+   El navegador NO lee este archivo: lee el .css que produce Sass.
+   ============================================================= */
 
 // @use trae las variables y el mixin del parcial _variables.scss
 // "as *" permite escribir $color-principal en vez de variables.$color-principal
 @use "variables" as *;
 
-// Variables CSS generadas desde las de Sass con #{ }: asi existen
-// tambien en el navegador (las usa Bootstrap, abajo)
+/* VARIABLES CSS (custom properties): se declaran en :root, que es la pagina entera.
+   Se usan con var(--nombre). A diferencia de las de Sass, ESTAS SI viven en el navegador
+   (Bootstrap tambien las lee). Son 5 colores de la identidad de ElectroVerde */
 :root {
     --color-principal: #{$color-principal};   // #{ } escribe el valor de la variable de Sass
     --color-acento: #{$color-acento};
     --color-suave: #{$color-suave};
+    --color-fondo: #{$color-fondo};
+    --color-texto: #{$color-texto};
 }
 
-// La pagina entera
+/* MODELO DE CAJA: toda etiqueta es una caja de 4 capas, de adentro hacia afuera:
+   contenido, padding (relleno), border (borde) y margin (margen).
+   border-box hace que width incluya padding y borde: asi las cajas no se ensanchan.
+   El selector * (universal) aplica a TODAS las etiquetas */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Selector de ETIQUETA: body aplica a la etiqueta <body>, o sea a toda la pagina */
 body {
     font-family: "Poppins", Arial, sans-serif;   // la fuente de Google Fonts; si no carga, Arial
-    background-color: $color-fondo;              // fondo claro (variable de Sass)
-    color: $color-texto;                         // color de la letra
+    background-color: var(--color-fondo);        // fondo claro (variable CSS)
+    color: var(--color-texto);                   // color de la letra
 }
 
-// Los titulos
+/* Selector AGRUPADO: la coma junta varios selectores que comparten las mismas reglas */
 h1, h2, h3 {
-    color: $color-principal;    // en verde oscuro
-    font-weight: 700;           // en negrilla
+    color: var(--color-principal);    // en verde oscuro
+    font-weight: 700;                 // en negrilla
 }
 
 // --- ANIDAMIENTO: las reglas de adentro solo aplican dentro de .encabezado ---
+/* Selector de CLASE (.encabezado): aplica a todo elemento con class="encabezado".
+   Aqui se ve el modelo de caja: margin-bottom (afuera) y padding (adentro).
+   Selector DESCENDIENTE (con espacio): .encabezado h1 = cualquier h1 DENTRO de
+   .encabezado, a cualquier profundidad; lo mismo .encabezado p */
 .encabezado {
     background-color: $color-principal;   // fondo verde oscuro
-    margin-bottom: 24px;                  // espacio debajo
-    @include caja(24px);            // el mixin con 24px de relleno
+    margin-bottom: 24px;                  // MARGEN: espacio de AFUERA, debajo de la caja
+    @include caja(24px);            // el mixin: padding de 24px (de ADENTRO), esquinas y sombra
 
     h1 {                            // se compila como .encabezado h1
         color: white;               // titulo en blanco
@@ -53,7 +68,35 @@ h1, h2, h3 {
     }
 }
 
-// La seccion con id="intro"
+/* La marca: el logo y el nombre, uno al lado del otro con FLEXBOX */
+.marca {
+    display: flex;                  // los hijos en fila
+    align-items: center;            // centrados en vertical
+    gap: 12px;                      // espacio entre el logo y el nombre
+    margin-bottom: 8px;             // espacio debajo
+
+    h1 {
+        margin: 0;                  // sin margen, para que quede alineado con el logo
+    }
+}
+
+// El logo es un SVG dibujado en el HTML; aqui se le dan tamano y colores
+.logo {
+    width: 48px;                    // ancho
+    height: 48px;                   // alto
+    flex-shrink: 0;                 // el logo no se encoge aunque falte espacio
+}
+
+.logo-fondo {
+    fill: var(--color-acento);      // el circulo, amarillo
+}
+
+.logo-rayo {
+    fill: var(--color-principal);   // el rayo, verde
+}
+
+/* Selector de ID (#intro): aplica al UNICO elemento con id="intro".
+   Pesa mas que una clase: si chocan, gana el id */
 #intro {
     background-color: white;                // fondo blanco
     padding: 16px 24px;                     // relleno: 16px arriba y abajo, 24px a los lados
@@ -62,7 +105,13 @@ h1, h2, h3 {
     border-radius: $radio;                  // esquinas redondeadas
 }
 
-// --- Menu con Flexbox ---
+/* MENU con FLEXBOX: display:flex pone los enlaces en fila.
+   Selector de HIJO (>): .menu > a = solo los <a> que son hijos DIRECTOS de .menu
+   (distinto del descendiente, que tambien tomaria los nietos).
+   Pseudoclase :hover = cuando el mouse esta ENCIMA del elemento.
+   Pseudoclase :focus = cuando el elemento tiene el foco (se llego con la tecla Tab).
+   Selector de ATRIBUTO [atributo="valor"]: el enlace de la pagina actual
+   (el HTML le pone aria-current="page") se ve resaltado */
 .menu {
     display: flex;          // los enlaces en fila
     flex-wrap: wrap;        // si no caben, pasan a otra linea
@@ -78,23 +127,29 @@ h1, h2, h3 {
         padding: 6px 16px;          // relleno: 6px arriba y abajo, 16px a los lados
         border: 2px solid rgba(255, 255, 255, 0.5);   // borde blanco semitransparente
         border-radius: 999px;       // forma de pildora
-        transition: background-color 0.3s, color 0.3s;   // cambio suave en 0,3 segundos
+        transition: background-color 0.3s, color 0.3s;   // TRANSICION: cambio suave en 0,3 segundos
 
         &:hover {                   // & = el selector de afuera: .menu > a:hover
             background-color: white;        // con el mouse encima: fondo blanco...
-            color: $color-principal;        // ...y letra verde
+            color: var(--color-principal);  // ...y letra verde
         }
 
-        &:focus {                   // .menu > a:focus: se llego con la tecla Tab
+        &:focus {                   // .menu > a:focus
             outline: 3px solid $color-acento;   // contorno amarillo
+        }
+
+        &[aria-current="page"] {
+            background-color: $color-acento;    // fondo amarillo
+            border-color: $color-acento;        // borde amarillo
+            color: $color-texto;                // letra oscura
         }
     }
 }
 
-// --- Tarjetas con Grid ---
+/* CATALOGO de tarjetas con CSS GRID: display:grid crea una rejilla de filas y columnas */
 .tarjetas {
     display: grid;                           // rejilla
-    grid-template-columns: repeat(3, 1fr);   // 3 columnas del mismo ancho
+    grid-template-columns: repeat(3, 1fr);   // 3 columnas del mismo ancho (1fr = una fraccion)
     gap: 16px;                               // espacio entre tarjetas
     margin-bottom: 24px;                     // espacio debajo
 
@@ -103,16 +158,20 @@ h1, h2, h3 {
     }
 
     @media (max-width: $celular) {
-        grid-template-columns: 1fr;              // en celular, 1 columna
+        grid-template-columns: 1fr;              // en celular, 1 columna: una tarjeta por fila
     }
 }
 
-// Cada tarjeta
+/* Cada tarjeta.
+   Pseudoclase :first-child = el elemento que es el PRIMER hijo de su padre.
+   Pseudoclase :nth-child(n) = el hijo que esta en la posicion n. Aqui, el parrafo que es
+   2.o hijo (portada) o 3.o hijo (catalogo y nosotros) de la tarjeta: altura minima
+   para alinear los textos de tarjetas vecinas (y son un selector AGRUPADO) */
 .tarjeta {
     background-color: white;            // fondo blanco
-    border: 1px solid $color-suave;     // borde fino verde claro
-    @include caja;                  // el mixin con su valor por defecto (16px)
-    transition: transform 0.3s;     // el movimiento sera suave
+    border: 1px solid $color-suave;     // BORDE: la capa entre el relleno y el margen
+    @include caja;                  // el mixin con su valor por defecto (16px de relleno)
+    transition: transform 0.3s;     // TRANSICION: el movimiento sera suave
 
     &:hover {                       // .tarjeta:hover: el mouse encima
         transform: translateY(-6px);   // sube 6 pixeles
@@ -122,16 +181,16 @@ h1, h2, h3 {
         border-top: 6px solid $color-acento;   // borde amarillo grueso arriba
     }
 
-    p:nth-child(2) {                // .tarjeta p:nth-child(2): el segundo hijo, si es un p
-        min-height: 48px;           // altura minima, para alinear los textos
+    p:nth-child(2), p:nth-child(3) {
+        min-height: 48px;           // altura minima
     }
 }
 
 // El precio de cada producto
 .precio {
-    color: $color-principal;    // en verde oscuro
-    font-size: 1.3rem;          // 1,3 veces el tamano normal
-    font-weight: 700;           // en negrilla
+    color: var(--color-principal);  // en verde oscuro
+    font-size: 1.3rem;              // 1,3 veces el tamano normal
+    font-weight: 700;               // en negrilla
 }
 
 // --- Lo que muestra cada producto (lo genera JavaScript) ---
@@ -140,17 +199,29 @@ h1, h2, h3 {
     display: inline-block;          // ocupa solo el ancho de su texto
     padding: 2px 10px;              // relleno pequeno
     border-radius: 999px;           // forma de pildora
-    background-color: $color-suave; // fondo verde claro
+    background-color: var(--color-suave);   // fondo verde claro
     font-size: 0.8rem;              // letra pequena
 }
 
 // El ahorro (kWh y pesos)
 .ahorro {
-    color: #2E7D32;         // en verde
+    color: $color-ahorro;   // en verde
     font-weight: 700;       // en negrilla
 }
 
-// --- Filtros: botones en fila ---
+/* El buscador: selector que combina DESCENDIENTE y ATRIBUTO:
+   .buscador input[type="search"] = el <input type="search"> dentro de .buscador */
+.buscador {
+    margin-bottom: 16px;            // espacio debajo
+
+    input[type="search"] {
+        border: 2px solid $color-principal;   // borde verde
+        border-radius: 999px;                 // forma de pildora
+        padding: 8px 20px;                    // relleno
+    }
+}
+
+/* FILTROS con FLEXBOX: los botones en fila */
 .filtros {
     display: flex;          // los botones en fila
     flex-wrap: wrap;        // si no caben, pasan a otra linea
@@ -165,54 +236,79 @@ h1, h2, h3 {
     color: $color-principal;              // letra verde
     padding: 6px 16px;                    // relleno
     border-radius: 999px;                 // forma de pildora
-    transition: background-color 0.3s;    // cambio de fondo suave
+    transition: background-color 0.3s;    // TRANSICION: cambio de fondo suave
 
-    &:hover,
-    &.activo {                      // &.activo = .filtro.activo: el boton elegido
+    &:hover, &.activo {             // &.activo = .filtro.activo: el boton elegido
         background-color: $color-principal;   // con el mouse encima o elegido: fondo verde...
         color: white;                         // ...y letra blanca
     }
 }
 
-// --- Catalogo: productos a la izquierda y carrito a la derecha ---
+/* CATALOGO en dos columnas con GRID: productos a la izquierda y carrito a la derecha.
+   3fr 1fr = la primera columna es 3 veces mas ancha que la segunda */
 .catalogo {
     display: grid;                  // rejilla
-    grid-template-columns: 3fr 1fr; // 2 columnas: la de productos 3 veces mas ancha que la del carrito
+    grid-template-columns: 3fr 1fr; // 2 columnas
     gap: 16px;                      // espacio entre las dos
     align-items: start;             // cada columna arriba, sin estirarse
 
     @media (max-width: $tablet) {
-        grid-template-columns: 1fr; // en tablet y celular, el carrito pasa abajo
+        grid-template-columns: 1fr; // en tablet y celular, el carrito pasa DEBAJO del catalogo
     }
 }
 
-// El carrito
+// El carrito (selector de id)
 #carrito {
     background-color: white;            // fondo blanco
     border: 2px solid $color-acento;    // borde amarillo
     @include caja;                      // relleno, esquinas y sombra (el mixin)
     position: sticky;               // el carrito se queda visible al bajar
     top: 16px;                      // a 16px del borde de arriba de la pantalla
+
+    @media (max-width: $tablet) {
+        position: static;           // cuando va debajo del catalogo, ya no se pega
+    }
+
+    // Selectores DESCENDIENTES con id: la lista y sus lineas, solo dentro del carrito
+    ul {
+        padding-left: 18px;         // sangria de la lista
+    }
+
+    li {
+        margin-bottom: 4px;         // espacio entre productos
+    }
 }
 
-// Los enlaces que abren otra pestana
+// El mensaje cuando el buscador no encuentra nada: ocupa todas las columnas de la rejilla
+.sin-resultados {
+    grid-column: 1 / -1;            // de la primera linea de columna a la ultima
+    color: $color-gris;             // letra gris
+}
+
+/* Selector de ATRIBUTO: a[target="_blank"] = los enlaces que abren otra pestana */
 a[target="_blank"] {
-    color: $color-principal;    // en verde oscuro
-    font-weight: 700;           // en negrilla
+    color: var(--color-principal);  // en verde oscuro
+    font-weight: 700;               // en negrilla
 }
 
-// El pie de pagina
+/* El pie de pagina.
+   Pseudoclase :last-child = el ULTIMO hijo: el ultimo parrafo no deja espacio debajo */
 .pie {
     margin-top: 24px;                   // espacio encima
     padding-top: 12px;                  // relleno arriba
     border-top: 1px solid $color-suave; // linea fina arriba
-    color: #52606D;                     // letra gris
+    color: $color-gris;                 // letra gris
     font-size: 0.9rem;                  // letra un poco mas pequena
+
+    p:last-child {
+        margin-bottom: 0;
+    }
 }
 
-// --- Bootstrap personalizado, sin tocar su archivo ---
-// Los botones primarios con los colores de la tienda.
-// Bootstrap lee sus colores de variables --bs-...: aqui se les dan otros valores
+/* --- Bootstrap personalizado, SIN tocar su archivo ---
+   Nuestra hoja va despues de Bootstrap y le cambia las variables --bs-... a cada componente */
+
+/* COMPONENTE 1, el boton primario (btn-primary), con los colores de ElectroVerde */
 .btn-primary {
     --bs-btn-bg: var(--color-principal);               // fondo del boton: verde
     --bs-btn-border-color: var(--color-principal);     // borde: verde
@@ -221,10 +317,23 @@ a[target="_blank"] {
     --bs-btn-hover-color: #1F2933;                     // y letra oscura
 }
 
-// El aviso (alert) con el amarillo de la tienda
+/* COMPONENTE 2, el aviso (alert) con el amarillo de la tienda */
 .alert-warning {
     background-color: #FFF8E1;              // fondo amarillo muy claro
     border-color: $color-acento;            // borde amarillo
     border-left: 6px solid $color-acento;   // borde grueso a la izquierda
     border-radius: $radio;                  // esquinas redondeadas
+}
+
+/* COMPONENTE 3, los campos del formulario (form-control y form-select):
+   al recibir el foco, borde y resplandor verdes en vez de azules */
+.form-control:focus, .form-select:focus {
+    border-color: $color-principal;                          // borde verde
+    box-shadow: 0 0 0 0.25rem rgba($color-principal, 0.25);  // resplandor verde translucido
+}
+
+// La casilla marcada (form-check-input) tambien en verde
+.form-check-input:checked {
+    background-color: $color-principal;
+    border-color: $color-principal;
 }
