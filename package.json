@@ -1,9 +1,11 @@
 {
-  "name": "ecotienda",
+  "name": "electroverde",
   "version": "1.0.0",
-  "description": "",
+  "description": "ElectroVerde: tienda de equipos que ahorran energia",
   "main": "index.js",
   "scripts": {
+    "css": "sass scss/estilos.scss css/estilos.css --no-source-map",
+    "watch": "sass --watch scss/estilos.scss css/estilos.css --no-source-map",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
