@@ -1,20 +1,45 @@
+/* =============================================================
+   Hoja de estilos de ElectroVerde, escrita en Sass.
+   Se compila a css/estilos.css con:
+       npx sass scss/estilos.scss css/estilos.css --no-source-map
+   El navegador NO lee este archivo: lee el .css que produce Sass.
+   ============================================================= */
+/* VARIABLES CSS (custom properties): se declaran en :root, que es la pagina entera.
+   Se usan con var(--nombre). A diferencia de las de Sass, ESTAS SI viven en el navegador
+   (Bootstrap tambien las lee). Son 5 colores de la identidad de ElectroVerde */
 :root {
   --color-principal: #1B5E20;
   --color-acento: #F9A825;
   --color-suave: #DDEBDD;
+  --color-fondo: #F4F7F2;
+  --color-texto: #1F2933;
 }
 
+/* MODELO DE CAJA: toda etiqueta es una caja de 4 capas, de adentro hacia afuera:
+   contenido, padding (relleno), border (borde) y margin (margen).
+   border-box hace que width incluya padding y borde: asi las cajas no se ensanchan.
+   El selector * (universal) aplica a TODAS las etiquetas */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Selector de ETIQUETA: body aplica a la etiqueta <body>, o sea a toda la pagina */
 body {
   font-family: "Poppins", Arial, sans-serif;
-  background-color: #F4F7F2;
-  color: #1F2933;
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
 }
 
+/* Selector AGRUPADO: la coma junta varios selectores que comparten las mismas reglas */
 h1, h2, h3 {
-  color: #1B5E20;
+  color: var(--color-principal);
   font-weight: 700;
 }
 
+/* Selector de CLASE (.encabezado): aplica a todo elemento con class="encabezado".
+   Aqui se ve el modelo de caja: margin-bottom (afuera) y padding (adentro).
+   Selector DESCENDIENTE (con espacio): .encabezado h1 = cualquier h1 DENTRO de
+   .encabezado, a cualquier profundidad; lo mismo .encabezado p */
 .encabezado {
   background-color: #1B5E20;
   margin-bottom: 24px;
@@ -37,6 +62,33 @@ h1, h2, h3 {
   }
 }
 
+/* La marca: el logo y el nombre, uno al lado del otro con FLEXBOX */
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.marca h1 {
+  margin: 0;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.logo-fondo {
+  fill: var(--color-acento);
+}
+
+.logo-rayo {
+  fill: var(--color-principal);
+}
+
+/* Selector de ID (#intro): aplica al UNICO elemento con id="intro".
+   Pesa mas que una clase: si chocan, gana el id */
 #intro {
   background-color: white;
   padding: 16px 24px;
@@ -45,6 +97,13 @@ h1, h2, h3 {
   border-radius: 12px;
 }
 
+/* MENU con FLEXBOX: display:flex pone los enlaces en fila.
+   Selector de HIJO (>): .menu > a = solo los <a> que son hijos DIRECTOS de .menu
+   (distinto del descendiente, que tambien tomaria los nietos).
+   Pseudoclase :hover = cuando el mouse esta ENCIMA del elemento.
+   Pseudoclase :focus = cuando el elemento tiene el foco (se llego con la tecla Tab).
+   Selector de ATRIBUTO [atributo="valor"]: el enlace de la pagina actual
+   (el HTML le pone aria-current="page") se ve resaltado */
 .menu {
   display: flex;
   flex-wrap: wrap;
@@ -65,12 +124,18 @@ h1, h2, h3 {
 }
 .menu > a:hover {
   background-color: white;
-  color: #1B5E20;
+  color: var(--color-principal);
 }
 .menu > a:focus {
   outline: 3px solid #F9A825;
 }
+.menu > a[aria-current=page] {
+  background-color: #F9A825;
+  border-color: #F9A825;
+  color: #1F2933;
+}
 
+/* CATALOGO de tarjetas con CSS GRID: display:grid crea una rejilla de filas y columnas */
 .tarjetas {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -88,6 +153,11 @@ h1, h2, h3 {
   }
 }
 
+/* Cada tarjeta.
+   Pseudoclase :first-child = el elemento que es el PRIMER hijo de su padre.
+   Pseudoclase :nth-child(n) = el hijo que esta en la posicion n. Aqui, el parrafo que es
+   2.o hijo (portada) o 3.o hijo (catalogo y nosotros) de la tarjeta: altura minima
+   para alinear los textos de tarjetas vecinas (y son un selector AGRUPADO) */
 .tarjeta {
   background-color: white;
   border: 1px solid #DDEBDD;
@@ -102,12 +172,12 @@ h1, h2, h3 {
 .tarjeta:first-child {
   border-top: 6px solid #F9A825;
 }
-.tarjeta p:nth-child(2) {
+.tarjeta p:nth-child(2), .tarjeta p:nth-child(3) {
   min-height: 48px;
 }
 
 .precio {
-  color: #1B5E20;
+  color: var(--color-principal);
   font-size: 1.3rem;
   font-weight: 700;
 }
@@ -116,7 +186,7 @@ h1, h2, h3 {
   display: inline-block;
   padding: 2px 10px;
   border-radius: 999px;
-  background-color: #DDEBDD;
+  background-color: var(--color-suave);
   font-size: 0.8rem;
 }
 
@@ -125,6 +195,18 @@ h1, h2, h3 {
   font-weight: 700;
 }
 
+/* El buscador: selector que combina DESCENDIENTE y ATRIBUTO:
+   .buscador input[type="search"] = el <input type="search"> dentro de .buscador */
+.buscador {
+  margin-bottom: 16px;
+}
+.buscador input[type=search] {
+  border: 2px solid #1B5E20;
+  border-radius: 999px;
+  padding: 8px 20px;
+}
+
+/* FILTROS con FLEXBOX: los botones en fila */
 .filtros {
   display: flex;
   flex-wrap: wrap;
@@ -145,6 +227,8 @@ h1, h2, h3 {
   color: white;
 }
 
+/* CATALOGO en dos columnas con GRID: productos a la izquierda y carrito a la derecha.
+   3fr 1fr = la primera columna es 3 veces mas ancha que la segunda */
 .catalogo {
   display: grid;
   grid-template-columns: 3fr 1fr;
@@ -166,12 +250,31 @@ h1, h2, h3 {
   position: sticky;
   top: 16px;
 }
+@media (max-width: 992px) {
+  #carrito {
+    position: static;
+  }
+}
+#carrito ul {
+  padding-left: 18px;
+}
+#carrito li {
+  margin-bottom: 4px;
+}
 
+.sin-resultados {
+  grid-column: 1/-1;
+  color: #52606D;
+}
+
+/* Selector de ATRIBUTO: a[target="_blank"] = los enlaces que abren otra pestana */
 a[target=_blank] {
-  color: #1B5E20;
+  color: var(--color-principal);
   font-weight: 700;
 }
 
+/* El pie de pagina.
+   Pseudoclase :last-child = el ULTIMO hijo: el ultimo parrafo no deja espacio debajo */
 .pie {
   margin-top: 24px;
   padding-top: 12px;
@@ -179,7 +282,13 @@ a[target=_blank] {
   color: #52606D;
   font-size: 0.9rem;
 }
+.pie p:last-child {
+  margin-bottom: 0;
+}
 
+/* --- Bootstrap personalizado, SIN tocar su archivo ---
+   Nuestra hoja va despues de Bootstrap y le cambia las variables --bs-... a cada componente */
+/* COMPONENTE 1, el boton primario (btn-primary), con los colores de ElectroVerde */
 .btn-primary {
   --bs-btn-bg: var(--color-principal);
   --bs-btn-border-color: var(--color-principal);
@@ -188,9 +297,22 @@ a[target=_blank] {
   --bs-btn-hover-color: #1F2933;
 }
 
+/* COMPONENTE 2, el aviso (alert) con el amarillo de la tienda */
 .alert-warning {
   background-color: #FFF8E1;
   border-color: #F9A825;
   border-left: 6px solid #F9A825;
   border-radius: 12px;
+}
+
+/* COMPONENTE 3, los campos del formulario (form-control y form-select):
+   al recibir el foco, borde y resplandor verdes en vez de azules */
+.form-control:focus, .form-select:focus {
+  border-color: #1B5E20;
+  box-shadow: 0 0 0 0.25rem rgba(27, 94, 32, 0.25);
+}
+
+.form-check-input:checked {
+  background-color: #1B5E20;
+  border-color: #1B5E20;
 }
