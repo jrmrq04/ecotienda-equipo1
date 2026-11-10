@@ -1,6 +1,6 @@
 // =============================================================
-// EcoTienda: el catalogo y el carrito, con JavaScript
-// Cada linea tiene un comentario: QUE hace y PARA QUE.
+// ElectroVerde: el catalogo y el carrito, con JavaScript
+// Cada bloque tiene un comentario: QUE hace y PARA QUE.
 // =============================================================
 
 // --- CONSTANTES: valores que no cambian. Se declaran con const ---
@@ -15,6 +15,7 @@ const DIAS_MES = 30;           // dias de un mes: para pasar el ahorro de un dia
 // wattsAntes   = cuanto gasta el equipo VIEJO que se reemplaza (en vatios, W)
 // wattsDespues = cuanto gasta el equipo NUEVO (0 si no gasta energia de la red)
 // horasDia     = cuantas horas al dia se usa
+// Hay 8 productos de 3 categorias: iluminacion, electrodomesticos y solar
 const productos = [
     { id: 1, nombre: "Bombillo LED 9 W", categoria: "iluminacion", precio: 8900,
       wattsAntes: 60, wattsDespues: 9, horasDia: 5 },
@@ -34,10 +35,13 @@ const productos = [
       wattsAntes: 550, wattsDespues: 0, horasDia: 4.5 }
 ];
 
-// --- VARIABLE: el carrito. Se declara con let porque SI cambia ---
-// Empieza vacio: [] es un arreglo sin elementos.
+// --- VARIABLES: se declaran con let porque SI cambian ---
+// El carrito empieza vacio: [] es un arreglo sin elementos.
 // Cada vez que se oprime "Agregar al carrito", se le agrega un producto
 let carrito = [];
+// La categoria elegida en los filtros. Empieza en "todas".
+// Se guarda aqui para que el buscador y los filtros trabajen juntos
+let categoriaActual = "todas";
 
 // --- FUNCIONES ---
 // Una funcion es un bloque de codigo con nombre.
@@ -45,34 +49,32 @@ let carrito = [];
 // Se escribe una vez y se usa muchas veces: ahorroKwhMes(producto)
 
 // ahorroKwhMes: cuantos kWh ahorra un producto en un mes.
-// Recibe un producto (uno de los objetos del arreglo).
 // Ejemplo con el bombillo: (60 - 9) x 5 x 30 / 1000 = 7.65 kWh
 function ahorroKwhMes(producto) {
-    // producto.wattsAntes - producto.wattsDespues = los vatios que se dejan de gastar (60 - 9 = 51 W)
-    // * producto.horasDia = por las horas de uso al dia (51 x 5 = 255 Wh al dia)
-    // * DIAS_MES          = por los 30 dias del mes (255 x 30 = 7650 Wh al mes)
-    // / 1000              = de Wh a kWh, que es como cobra la empresa de energia (7650 / 1000 = 7.65 kWh)
-    // return devuelve ese numero a quien llamo la funcion
+    // (wattsAntes - wattsDespues) = los vatios que se dejan de gastar (60 - 9 = 51 W)
+    // * horasDia = por las horas de uso al dia (51 x 5 = 255 Wh al dia)
+    // * DIAS_MES = por los 30 dias del mes (255 x 30 = 7650 Wh al mes)
+    // / 1000     = de Wh a kWh, que es como cobra la empresa de energia (7650 / 1000 = 7.65 kWh)
     return (producto.wattsAntes - producto.wattsDespues) * producto.horasDia * DIAS_MES / 1000;
 }
 
 // ahorroPesosMes: cuantos pesos ahorra un producto en un mes.
 // Ejemplo con el bombillo: 7.65 kWh x 950 = 7267.5 pesos
 function ahorroPesosMes(producto) {
-    // Llama la funcion anterior para saber los kWh (7.65)
-    // y los multiplica por lo que cuesta cada kWh (TARIFA = 950)
+    // Llama la funcion anterior para saber los kWh y los multiplica por lo que cuesta cada kWh
     return ahorroKwhMes(producto) * TARIFA;
 }
 
 // pesos: escribe un numero como plata colombiana.
-// Ejemplos: pesos(8900) -> "$8.900"   pesos(7267.5) -> "$7.268"
+// Ejemplos: pesos(8900) -> "$8.900"   pesos(7267.5) -> "$7.268"   pesos(2400000) -> "$2.400.000"
 function pesos(valor) {
-    // Math.round(valor)       = redondea sin decimales: 7267.5 -> 7268
-    // .toLocaleString("es-CO") = lo escribe como en Colombia, con punto de miles: 7268 -> "7.268"
-    // "$"                     = solo TEXTO: el signo de pesos, entre comillas
-    // +                       = PEGA los dos textos: "$" + "7.268" -> "$7.268"
-    // (Este "$" NO es el de ${ }: el de ${ } se usa dentro de comillas invertidas, mas abajo)
-    return "$" + Math.round(valor).toLocaleString("es-CO");
+    // Math.round(valor) = redondea sin decimales: 7267.5 -> 7268
+    // .toString()       = lo pasa a texto: "7268"
+    // .replace(...)     = le pone un punto antes de cada grupo de 3 cifras contado desde el final:
+    //                     "2400000" -> "2.400.000". Se hace a mano (y no con toLocaleString)
+    //                     para que salga igual en cualquier navegador y computador
+    const entero = Math.round(valor).toString();
+    return "$" + entero.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
 
 // nombreCategoria: el nombre de la categoria para mostrar, con tilde y mayuscula.
@@ -80,45 +82,60 @@ function pesos(valor) {
 function nombreCategoria(categoria) {
     // CONDICIONAL: if = "si"; else if = "si no, si"; else = "si no"
     // === compara si son EXACTAMENTE iguales (mismo texto, mismas minusculas)
-    // Si la categoria es "iluminacion"...
     if (categoria === "iluminacion") {
-        // ...devuelve el nombre bonito y la funcion termina aqui
         return "Iluminación";
-    // Si no, si es "electrodomesticos"...
     } else if (categoria === "electrodomesticos") {
         return "Electrodomésticos";
-    // Si no es ninguna de las dos anteriores...
     } else {
         // ...solo queda "solar"
         return "Energía solar";
     }
 }
 
+// normalizar: deja un texto en minusculas y sin tildes, para que el buscador
+// encuentre "iluminacion" aunque se escriba "Iluminación".
+// Ejemplo: normalizar("Regleta Automática") -> "regleta automatica"
+function normalizar(texto) {
+    // toLowerCase() = a minusculas.
+    // normalize("NFD") separa cada letra de su tilde ("á" -> "a" + tilde)
+    // y el replace borra las tildes sueltas (el rango \u0300-\u036f)
+    return texto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
 // --- DOM: escribir en la pagina las tarjetas de los productos ---
 // DOM = la pagina vista desde JavaScript: cada etiqueta del HTML es un objeto
 // que JavaScript puede buscar, leer y cambiar
-// mostrarProductos: escribe en la pagina una tarjeta por cada producto.
-// categoria = "todas" o el nombre de una categoria, segun el boton de filtro que se oprimio
-function mostrarProductos(categoria) {
-    // document.querySelector("#productos") busca en la pagina el elemento con id="productos"
-    // (el <div id="productos"> vacio de catalogo.html) y lo guarda en la constante contenedor
+// mostrarProductos: escribe una tarjeta por cada producto que cumpla DOS condiciones:
+// que sea de la categoria elegida y que su nombre o categoria contengan el texto del buscador.
+// categoria = "todas" o el nombre de una categoria; texto = lo que se escribio en el buscador
+function mostrarProductos(categoria, texto) {
+    // Busca en la pagina el <div id="productos"> vacio de catalogo.html
     const contenedor = document.querySelector("#productos");
-    // innerHTML = el HTML que hay dentro del elemento. "" = nada: lo vacia,
-    // para no repetir tarjetas si la funcion se llama otra vez
+    // Lo vacia, para no repetir tarjetas si la funcion se llama otra vez
     contenedor.innerHTML = "";
+    // El texto del buscador, ya sin tildes ni mayusculas
+    const buscado = normalizar(texto);
+    // Un contador de cuantas tarjetas se muestran (let, porque va sumando)
+    let mostrados = 0;
 
     // BUCLE for...of: repite el bloque { } una vez por cada elemento del arreglo.
     // En cada vuelta, producto es un producto distinto: 1.a vuelta el bombillo, 2.a el panel...
     for (const producto of productos) {
-        // Si se eligio una categoria (no "todas") Y el producto es de OTRA categoria...
-        // !== significa "distinto de"; && significa "y" (las dos cosas deben cumplirse)
-        // Ejemplo: categoria = "solar" y producto.categoria = "iluminacion" -> se cumple
+        // CONDICIONAL 1 (filtro): si se eligio una categoria (no "todas")
+        // Y el producto es de OTRA categoria, se salta (continue = pasar a la siguiente vuelta)
+        // !== significa "distinto de"; && significa "y"
         if (categoria !== "todas" && producto.categoria !== categoria) {
-            // ...continue salta a la siguiente vuelta del bucle: este producto no se muestra
             continue;
         }
-        // Agrega la tarjeta de este producto al contenedor.
-        // += agrega al final de lo que ya habia (sin += se borrarian las tarjetas anteriores)
+        // CONDICIONAL 2 (buscador): si ni el nombre NI la categoria contienen lo buscado, se salta.
+        // includes() dice si un texto contiene a otro; ! significa "no".
+        // Se juntan nombre y categoria en un solo texto: "Bombillo LED 9 W Iluminación"
+        if (!normalizar(producto.nombre + " " + nombreCategoria(producto.categoria)).includes(buscado)) {
+            continue;
+        }
+        // Este producto si se muestra: se cuenta
+        mostrados++;
+        // Agrega la tarjeta al contenedor. += agrega al final de lo que ya habia.
         // El texto va entre comillas invertidas ` ` (TEMPLATE STRING):
         // permite varias lineas y meter valores con ${ }. Ejemplo: ${producto.nombre} -> Bombillo LED 9 W
         // Lo que se mete en cada ${ }:
@@ -140,6 +157,11 @@ function mostrarProductos(categoria) {
                 <button class="btn btn-primary btn-sm" data-id="${producto.id}">Agregar al carrito</button>
             </article>`;
     }
+
+    // Si ningun producto cumplio las condiciones, avisa en vez de dejar el catalogo en blanco
+    if (mostrados === 0) {
+        contenedor.innerHTML = `<p class="sin-resultados">No hay productos que coincidan con la búsqueda.</p>`;
+    }
 }
 
 // --- El carrito ---
@@ -159,37 +181,32 @@ function agregarAlCarrito(id) {
     mostrarCarrito();
 }
 
-// mostrarCarrito: dibuja el carrito: la lista, el total y el ahorro.
+// mostrarCarrito: dibuja el carrito: la lista, el total, el ahorro y en cuantos meses se paga.
 // Se llama cada vez que el carrito cambia (al agregar o al vaciar)
 function mostrarCarrito() {
     // Busca la lista <ul id="lista-carrito"> del carrito
     const lista = document.querySelector("#lista-carrito");
     // La vacia, para escribirla de nuevo completa (si no, los productos se repetirian)
     lista.innerHTML = "";
-    // ACUMULADORES: variables que empiezan en 0 y van sumando en el bucle.
-    // let, porque su valor cambia en cada vuelta
+    // ACUMULADORES: variables que empiezan en 0 y van sumando en el bucle (let, porque cambian)
     let total = 0;
     let ahorroMes = 0;
 
     // Recorre los productos que hay en el carrito
     for (const producto of carrito) {
         // Agrega a la lista una linea <li> con el nombre y el precio.
-        // Ejemplo: <li>Bombillo LED 9 W: $8.900</li>
         lista.innerHTML += `<li>${producto.nombre}: ${pesos(producto.precio)}</li>`;
         // Suma el precio al total. total += precio es lo mismo que total = total + precio
-        // Ejemplo: 0 + 1200000 = 1200000; luego 1200000 + 8900 = 1208900...
         total += producto.precio;
         // Suma lo que ahorra este producto al mes
         ahorroMes += ahorroPesosMes(producto);
     }
 
-    // Escribe el total en el parrafo <p id="total">.
-    // textContent = el texto que se ve dentro del elemento. Ejemplo: "Total: $1.217.800"
+    // Escribe el total en el parrafo <p id="total">. Ejemplo: "Total: $1.217.800"
     document.querySelector("#total").textContent = "Total: " + pesos(total);
 
     // .length = cuantos elementos tiene el arreglo. Si es 0, el carrito esta vacio
     if (carrito.length === 0) {
-        // Carrito vacio: un mensaje en el parrafo <p id="ahorro">
         document.querySelector("#ahorro").textContent = "El carrito está vacío.";
     } else {
         // En cuantos meses el ahorro paga la compra: el total dividido el ahorro de cada mes.
@@ -197,7 +214,6 @@ function mostrarCarrito() {
         // Math.ceil redondea HACIA ARRIBA: 18.9 -> 19 (con 18 meses todavia no alcanza)
         const meses = Math.ceil(total / ahorroMes);
         // Escribe el ahorro y los meses en <p id="ahorro">, con un template string.
-        // Ejemplo: "Ahorra $64.410 al mes: la compra se paga sola en 19 meses."
         document.querySelector("#ahorro").textContent =
             `Ahorra ${pesos(ahorroMes)} al mes: la compra se paga sola en ${meses} meses.`;
     }
@@ -205,34 +221,40 @@ function mostrarCarrito() {
 
 // --- EVENTOS: el programa reacciona a lo que hace el usuario ---
 
+// El campo del buscador: <input id="buscador">
+const buscador = document.querySelector("#buscador");
+
+// Evento "input": ocurre CADA VEZ que cambia lo escrito en el campo (con cada letra).
+// Asi la busqueda se hace mientras se escribe, sin boton
+buscador.addEventListener("input", function () {
+    // buscador.value = lo que hay escrito. Se respeta la categoria que estaba elegida
+    mostrarProductos(categoriaActual, buscador.value);
+});
+
 // querySelectorAll busca TODOS los elementos con la clase .filtro (los 4 botones de filtro)
-// y los guarda en botonesFiltro (una lista)
 const botonesFiltro = document.querySelectorAll(".filtro");
 // Recorre los 4 botones...
 for (const boton of botonesFiltro) {
     // ...y a cada uno le pone a ESCUCHAR el evento "click".
-    // addEventListener("click", funcion) = cuando le hagan clic, ejecuta esta funcion
     boton.addEventListener("click", function () {
-        // Recorre otra vez los 4 botones...
+        // Quita la clase "activo" a todos los botones...
         for (const otro of botonesFiltro) {
-            // ...y les quita la clase "activo" a todos (classList = las clases del elemento)
             otro.classList.remove("activo");
         }
-        // Le pone la clase "activo" solo al boton que se oprimio: el CSS lo pinta de verde
+        // ...y se la pone solo al que se oprimio: el CSS lo pinta de verde
         boton.classList.add("activo");
-        // Vuelve a dibujar los productos, solo los de la categoria del boton.
-        // dataset.categoria lee el atributo data-categoria del HTML.
-        // Ejemplo: <button data-categoria="solar"> -> "solar"
-        mostrarProductos(boton.dataset.categoria);
+        // Guarda la categoria elegida. dataset.categoria lee el atributo data-categoria del HTML
+        categoriaActual = boton.dataset.categoria;
+        // Vuelve a dibujar los productos, respetando tambien lo que haya en el buscador
+        mostrarProductos(categoriaActual, buscador.value);
     });
 }
 
 // Clic en un boton "Agregar al carrito".
 // Se escucha en el CONTENEDOR #productos y no en cada boton, porque los botones
-// los crea JavaScript y se borran y se vuelven a crear cada vez que se filtra
+// los crea JavaScript y se borran y se vuelven a crear cada vez que se filtra o se busca
 document.querySelector("#productos").addEventListener("click", function (evento) {
-    // evento = la informacion del clic. evento.target = el elemento exacto donde se hizo clic
-    // (puede ser un boton, un titulo, un precio...).
+    // evento.target = el elemento exacto donde se hizo clic.
     // Si tiene data-id, es un boton "Agregar al carrito"; si no, se hizo clic en otra parte
     if (evento.target.dataset.id) {
         // dataset.id es TEXTO ("1"). Number lo convierte en numero (1),
@@ -250,7 +272,6 @@ document.querySelector("#vaciar").addEventListener("click", function () {
 });
 
 // --- Al cargar la pagina ---
-// Llama las funciones apenas se abre la pagina:
-// muestra todos los productos ("todas") y el carrito vacio
-mostrarProductos("todas");
+// muestra todos los productos ("todas", sin texto de busqueda) y el carrito vacio
+mostrarProductos("todas", "");
 mostrarCarrito();
