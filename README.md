@@ -12,7 +12,7 @@
 
 <h3>Paso 1.</h3>
 
-<p>Descargar el código fuente</p>
+<p>Descargar el <a href="https://github.com/jrmrq04/ecotienda-equipo1/releases/tag/ea3" rel="external">código fuente</a></p>
 
 <h3>Paso 2.</h3>
 
