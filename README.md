@@ -23,19 +23,26 @@
 
 <p>cd "Ruta del proyecto sin las comillas"/api</p>
 
-<p><strong>2° comando</strong></p>
+<p><strong>2° comando:</strong></p>
 
 <p>npm install</p>
 
 <h3>Paso 3.</h3>
 
-<p>levantar el API usando el comando:</p>
+<p>Crear la base de datos en ahí mismo usando el comando:</p>
+
+<p>npm run crear-bd</p>
+
+<h3>Paso 4.</h3>
+
+<p>Levantar el API usando el comando:</p>
 
 <p>npm run dev</p>
 
-<p>Activando el API con http://localhost:3001</p>
+<p>Esto levantará el API con http://localhost:3001</p>
+<p>Si se cierra la ventana, el API se detiene</p>
 
-<h3>Paso 4.</h3>
+<h3>Paso 5.</h3>
 
 <p>Abrir Visual Studio Code</p>
 
