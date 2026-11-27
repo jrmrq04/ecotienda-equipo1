@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta name="theme-color" content="#1b5e20">
+    <!-- meta charset="UTF-8": permite tildes y enes -->
+    <meta charset="UTF-8">
+    <!-- meta viewport: en el celular, la pagina usa el ancho real de la pantalla, sin zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- title: el texto de la pestana del navegador -->
+    <title>Administración · ElectroVerde</title>
+    <!-- icon: el iconito de la pestana (un rayo). Va dentro del enlace, asi no hace falta otro archivo -->
+    <link rel="icon" href="favicon.ico">
+    <!-- Bootstrap: hoja de estilos ya hecha, desde internet (CDN). Va PRIMERO -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- Google Fonts: la fuente Poppins. preconnect abre la conexion antes, para que cargue mas rapido -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- crossorigin: el archivo de la fuente viene de otro sitio (gstatic.com); asi lo permite -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- La hoja de la fuente: grosor normal (400) y negrilla (700) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap">
+    <!-- Hoja de estilos PROPIA (estilo EXTERNO): css/estilos.css, la MISMA en las 4 paginas.
+         Va DESPUES de Bootstrap: si las dos dicen algo distinto, gana la que se carga de ultimas -->
+    <link rel="stylesheet" href="css/estilos.css">
+    <!-- script: carga el programa JavaScript js/app.js.
+         defer: lo ejecuta cuando la pagina ya termino de cargar
+         (si no, JavaScript buscaria #productos antes de que exista) -->
+    <script src="js/app.js" defer></script>
+    <!-- Cierra el head -->
+</head>
+
+<body class="kMegaq_className">
+    <div hidden=""></div>
+    <div class="container py-3">
+        <header class="encabezado">
+            <div class="marca"><svg class="logo" viewBox="0 0 48 48" role="img" aria-label="Logo de ElectroVerde">
+                    <circle class="logo-fondo" cx="24" cy="24" r="22"></circle>
+                    <path class="logo-rayo" d="M27 6 14 27h8l-3 15 15-22h-9z"></path>
+                </svg>
+                <h1>ElectroVerde · Administración</h1>
+            </div>
+            <p>Cree y elimine productos, y vea los pedidos que llegaron.</p>
+            <nav class="menu"><a href="index.html">Inicio</a><a href="catalogo.html">Catálogo</a><a aria-current="page"
+                    href="admin.html">Administración</a><a href="nosotros.html">Nosotros</a><a
+                    href="contacto.html">Contacto</a>
+            </nav>
+        </header>
+        <main>
+            <section id="intro">
+                <h2>Nuevo producto</h2>
+                <form class="row g-3 align-items-end">
+                    <div class="col-12 col-md-4"><label for="nombre" class="form-label">Nombre</label><input id="nombre"
+                            class="form-control" placeholder="Cargador solar portátil" name="nombre" value="" /></div>
+                    <div class="col-12 col-md-3"><label for="categoria" class="form-label">Categoría</label><select
+                            id="categoria" name="categoria" class="form-select">
+                            <option value="iluminacion" selected="">Iluminación</option>
+                            <option value="electrodomesticos">Electrodomésticos</option>
+                            <option value="solar">Energía solar</option>
+                        </select></div>
+                    <div class="col-12 col-md-3"><label for="precio" class="form-label">Precio (COP)</label><input
+                            id="precio" type="number" min="1" class="form-control" placeholder="120000" name="precio"
+                            value="" /></div>
+                    <div class="col-6 col-md-2"><label for="wattsAntes" class="form-label">W viejo</label><input
+                            id="wattsAntes" type="number" min="1" class="form-control" placeholder="60"
+                            name="wattsAntes" value="" /></div>
+                    <div class="col-6 col-md-2"><label for="wattsDespues" class="form-label">W nuevo</label><input
+                            id="wattsDespues" type="number" min="0" class="form-control" placeholder="9"
+                            name="wattsDespues" value="" /></div>
+                    <div class="col-6 col-md-2"><label for="horasDia" class="form-label">Horas al día</label><input
+                            id="horasDia" type="number" min="0.5" step="0.5" class="form-control" placeholder="5"
+                            name="horasDia" value="" /></div>
+                    <div class="col-6 col-md-3 d-flex gap-2"><button type="submit"
+                            class="btn btn-primary">Guardar</button><button type="button"
+                            class="btn btn-outline-secondary">Cancelar</button></div>
+                </form>
+            </section>
+            <section class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h5 card-title">Productos</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th class="text-end">Precio</th>
+                                    <th class="text-end">Ahorro al mes</th>
+                                    <th class="text-end">Meses</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <section class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="h5 card-title">Pedidos recibidos</h2>
+                    <p>Todavía no hay pedidos.</p>
+                </div>
+            </section>
+        </main>
+        <footer class="pie">
+            <p>Fuente de los precios: <a href="https://www.xm.com.co" target="_blank" rel="noopener noreferrer">XM</a>.
+                Los productos y sus precios son de ejemplo.</p>
+            <p>ElectroVerde · Ingeniería Web I · IU Digital de Antioquia · 2026-2</p>
+        </footer>
+    </div>
+</body>
+
+</html>
