@@ -3,7 +3,9 @@
 <!-- html: encierra TODA la pagina. lang="es": el texto esta en espanol -->
 <html lang="es">
 <!-- head: datos de la pagina que NO se ven (titulo, estilos, fuentes, scripts) -->
+
 <head>
+    <meta name="theme-color" content="#1b5e20">
     <!-- meta charset="UTF-8": permite tildes y enes -->
     <meta charset="UTF-8">
     <!-- meta viewport: en el celular, la pagina usa el ancho real de la pantalla, sin zoom -->
@@ -23,9 +25,10 @@
     <!-- Hoja de estilos PROPIA (estilo EXTERNO): css/estilos.css, la MISMA en las 4 paginas.
          Va DESPUES de Bootstrap: si las dos dicen algo distinto, gana la que se carga de ultimas -->
     <link rel="stylesheet" href="css/estilos.css">
-<!-- Cierra el head -->
+    <!-- Cierra el head -->
 </head>
 <!-- body: todo lo que se ve. container centra el contenido; py-3 deja espacio arriba y abajo -->
+
 <body class="container py-3">
     <!-- header: el encabezado, igual en las 4 paginas (clase propia "encabezado") -->
     <header class="encabezado">
@@ -45,6 +48,7 @@
         <nav class="menu">
             <a href="index.html" aria-current="page">Inicio</a>
             <a href="catalogo.html">Catálogo</a>
+            <a href="admin.html">Administración</a>
             <a href="nosotros.html">Nosotros</a>
             <a href="contacto.html">Contacto</a>
         </nav>
@@ -109,8 +113,9 @@
         <!-- Enlace a XM, la empresa que publica los precios de la energia en Colombia.
              target="_blank": se abre en OTRA pestana; rel="noopener" lo hace mas seguro -->
         <p>Fuente de los precios: <a href="https://www.xm.com.co" target="_blank" rel="noopener">XM</a>.
-           Los productos y sus precios son de ejemplo.</p>
+            Los productos y sus precios son de ejemplo.</p>
         <p>ElectroVerde · Ingeniería Web I · IU Digital de Antioquia · 2026-2</p>
     </footer>
 </body>
+
 </html>

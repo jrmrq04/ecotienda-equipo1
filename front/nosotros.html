@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<!-- DOCTYPE: le dice al navegador que esta pagina es HTML5. Siempre va en la primera linea -->
-<!-- html: encierra TODA la pagina. lang="es": el texto esta en espanol -->
 <html lang="es">
 <!-- head: datos de la pagina que NO se ven (titulo, estilos, fuentes, scripts) -->
+
 <head>
+    <meta name="theme-color" content="#1b5e20">
     <!-- meta charset="UTF-8": permite tildes y enes -->
     <meta charset="UTF-8">
     <!-- meta viewport: en el celular, la pagina usa el ancho real de la pantalla, sin zoom -->
@@ -23,57 +23,45 @@
     <!-- Hoja de estilos PROPIA (estilo EXTERNO): css/estilos.css, la MISMA en las 4 paginas.
          Va DESPUES de Bootstrap: si las dos dicen algo distinto, gana la que se carga de ultimas -->
     <link rel="stylesheet" href="css/estilos.css">
-<!-- Cierra el head -->
+    <!-- Cierra el head -->
 </head>
-<!-- body: todo lo que se ve. container centra el contenido; py-3 deja espacio arriba y abajo -->
-<body class="container py-3">
-    <!-- header: el encabezado, igual en las 4 paginas (clase propia "encabezado") -->
-    <header class="encabezado">
-        <!-- div class="marca": el logo y el nombre, en fila (Flexbox) -->
-        <div class="marca">
-            <!-- svg: el LOGO dibujado con codigo (un circulo y un rayo). Sus colores estan en estilos.css -->
-            <svg class="logo" viewBox="0 0 48 48" role="img" aria-label="Logo de ElectroVerde">
-                <circle class="logo-fondo" cx="24" cy="24" r="22"></circle>
-                <path class="logo-rayo" d="M27 6 14 27h8l-3 15 15-22h-9z"></path>
-            </svg>
-            <!-- h1: el titulo principal (solo uno por pagina) -->
-            <h1>ElectroVerde · Nosotros</h1>
-        </div>
-        <!-- p: un parrafo que explica la pagina -->
-        <p>El equipo que hizo ElectroVerde.</p>
-        <!-- nav: el menu, con un enlace (a) a cada pagina. href: la pagina a la que lleva -->
-        <nav class="menu">
-            <a href="index.html">Inicio</a>
-            <a href="catalogo.html">Catálogo</a>
-            <a href="nosotros.html" aria-current="page">Nosotros</a>
-            <a href="contacto.html">Contacto</a>
-        </nav>
-    </header>
 
-    <!-- main: el contenido principal -->
-    <main>
-        <section>
-            <h2>Nuestro equipo</h2>
-            <!-- div class="tarjetas": la REJILLA (3 columnas en computador, 2 en tablet, 1 en celular) -->
-            <div class="tarjetas">
-                <!-- Una TARJETA por integrante: nombre (h3) y rol (p).
-                     Para agregar a otro integrante, copie un article completo y cambie nombre y rol -->
-                <article class="tarjeta">
-                    <!-- span class="categoria": la etiqueta pequena en forma de pildora -->
-                    <span class="categoria">Integrante 1</span>
-                    <!-- h3: el nombre del integrante -->
-                    <h3>Jairo Alberto Marquez Mejia</h3>
-                    <!-- p: su rol en el equipo -->
-                    <p>Rol: Líder del proyecto y diseño de la tienda.</p>
-                </article>
+<body class="kMegaq_className">
+    <div hidden=""></div>
+    <div class="container py-3">
+        <header class="encabezado">
+            <div class="marca"><svg class="logo" viewBox="0 0 48 48" role="img" aria-label="Logo de ElectroVerde">
+                    <circle class="logo-fondo" cx="24" cy="24" r="22"></circle>
+                    <path class="logo-rayo" d="M27 6 14 27h8l-3 15 15-22h-9z"></path>
+                </svg>
+                <h1>ElectroVerde · Nosotros</h1>
             </div>
-        </section>
-    </main>
-
-    <!-- footer: el pie de pagina, con su clase propia "pie" -->
-    <footer class="pie">
-        <p>Los productos y sus precios son de ejemplo.</p>
-        <p>ElectroVerde · Ingeniería Web I · IU Digital de Antioquia · 2026-2</p>
-    </footer>
+            <p>El equipo que hizo ElectroVerde.</p>
+            <nav class="menu">
+                <a href="index.html">Inicio</a>
+                <a href="catalogo.html">Catálogo</a>
+                <a href="admin.html">Administración</a>
+                <a aria-current="page" href="nosotros.html">Nosotros</a>
+                <a href="contacto.html">Contacto</a>
+            </nav>
+        </header>
+        <main>
+            <section>
+                <h2>Nuestro equipo</h2>
+                <div class="tarjetas">
+                    <article class="tarjeta"><span class="categoria">Integrante 1</span>
+                        <h3>Jairo Alberto Marquez Mejia</h3>
+                        <p>Rol: Líder del proyecto y diseño de la tienda.</p>
+                    </article>
+                </div>
+            </section>
+        </main>
+        <footer class="pie">
+            <p>Fuente de los precios: <a href="https://www.xm.com.co" target="_blank" rel="noopener noreferrer">XM</a>.
+                Los productos y sus precios son de ejemplo.</p>
+            <p>ElectroVerde · Ingeniería Web I · IU Digital de Antioquia · 2026-2</p>
+        </footer>
+    </div>
 </body>
+
 </html>
