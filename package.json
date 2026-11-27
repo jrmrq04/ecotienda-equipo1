@@ -14,5 +14,13 @@
   "type": "commonjs",
   "devDependencies": {
     "sass": "^1.106.1"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrmrq04/ecotienda-equipo1.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jrmrq04/ecotienda-equipo1/issues"
+  },
+  "homepage": "https://github.com/jrmrq04/ecotienda-equipo1#readme"
 }
